@@ -1,14 +1,26 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import FacebookIcon from "@mui/icons-material/Facebook";
-
+import { getDownloadCount, incrementDownloadCount } from "../downloadCounter";
 import "./App.css";
 
 function App() {
+  const [downloads, setDownloads] = useState(0);
+  const [pop, setPop] = useState(false);
+
+  // Load initial count from Supabase
   useEffect(() => {
-    // Fade-in observer
+    const loadCount = async () => {
+      const count = await getDownloadCount();
+      setDownloads(count);
+    };
+    loadCount();
+  }, []);
+
+  // Fade-in observer & carousel
+  useEffect(() => {
     const faders = document.querySelectorAll(".fade-in");
 
     const appearOptions = {
@@ -27,7 +39,6 @@ function App() {
 
     faders.forEach((fader) => observer.observe(fader));
 
-    // Carousel logic
     const slides = document.querySelectorAll(".carousel-slide");
     const container = document.querySelector(".carousel-container");
 
@@ -41,6 +52,14 @@ function App() {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Function to handle download clicks
+  const handleDownloadClick = async () => {
+    const newCount = await incrementDownloadCount();
+    setDownloads(newCount);
+    setPop(true);
+    setTimeout(() => setPop(false), 250);
+  };
 
   return (
     <>
@@ -60,10 +79,20 @@ function App() {
             </p>
 
             <div className="hero-actions">
-              <a href="/ChoirFlo.apk" className="btn-primary large" download>
+              <a
+                href="/ChoirFlo.apk"
+                className="btn-primary large"
+                download
+                onClick={handleDownloadClick}
+              >
                 Download Android App
               </a>
               <span className="hero-note">Android • Free to use</span>
+            </div>
+
+            {/* Download count */}
+            <div className={`download-count ${pop ? "pop" : ""}`}>
+              {downloads.toLocaleString()}+ Downloads
             </div>
           </div>
 
@@ -108,6 +137,7 @@ function App() {
           </div>
         </section>
 
+        {/* FEATURES */}
         <section className="section features-section">
           <div className="container">
             <h2 style={{ color: "#1c6e3f" }}>Built for Real Music Team Work</h2>
@@ -142,17 +172,21 @@ function App() {
           </div>
         </section>
 
-        {/* DOWNLOAD */}
+        {/* DOWNLOAD SECTION */}
         <section className="section download-section">
           <div className="container download-box fade-in">
             <h2 style={{ color: "#1c6e3f" }}>Start Using ChoirFlo Today</h2>
-
             <p>
               Download the Android app and experience a better way to manage
-              your team&apos;s music.
+              your team's music.
             </p>
 
-            <a href="/ChoirFlo.apk" className="btn-primary large" download>
+            <a
+              href="/ChoirFlo.apk"
+              className="btn-primary large"
+              download
+              onClick={handleDownloadClick}
+            >
               Download APK
             </a>
           </div>
@@ -172,7 +206,6 @@ function App() {
               <XIcon fontSize="medium" />
             </a>
           </li>
-
           <li>
             <a
               href="https://www.linkedin.com/in/badrudavid"
@@ -183,7 +216,6 @@ function App() {
               <LinkedInIcon fontSize="medium" />
             </a>
           </li>
-
           <li>
             <a
               href="https://github.com/DavidOneVoice"
@@ -194,7 +226,6 @@ function App() {
               <GitHubIcon fontSize="medium" />
             </a>
           </li>
-
           <li>
             <a
               href="https://www.facebook.com/profile.php?id=61559488910917"
@@ -209,7 +240,6 @@ function App() {
 
         <ul className="menu">
           <li>&copy; 2026 Badru Olumide David</li>
-
           <li>
             Design:
             <a
@@ -221,7 +251,6 @@ function App() {
               OVTech
             </a>
           </li>
-
           <li>
             <a
               href="https://badrudavidportfolio.netlify.app"

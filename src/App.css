@@ -460,3 +460,26 @@ footer::before {
     margin: 0 auto;
   }
 }
+.download-count {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f4b41a; /* accent color */
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 16px;
+  border-radius: 12px;
+  display: inline-block;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.download-count:hover {
+  cursor: pointer;
+}
+
+.download-count.pop {
+  transform: scale(1.15);
+  background-color: rgba(255, 255, 255, 0.25);
+}
