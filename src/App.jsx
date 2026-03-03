@@ -19,7 +19,6 @@ function App() {
     loadCount();
   }, []);
 
-  // Fade-in observer & carousel
   useEffect(() => {
     const faders = document.querySelectorAll(".fade-in");
 
@@ -82,6 +81,7 @@ function App() {
               <a
                 href="/ChoirFlo.apk"
                 className="btn-primary large"
+                id="choirflo-download"
                 download
                 onClick={handleDownloadClick}
               >
@@ -184,10 +184,11 @@ function App() {
             <a
               href="/ChoirFlo.apk"
               className="btn-primary large"
+              id="choirflo-download"
               download
               onClick={handleDownloadClick}
             >
-              Download APK
+              Download/Update APK
             </a>
           </div>
         </section>
