@@ -71,7 +71,7 @@ function App() {
               <span>With Clarity & Ease</span>
             </h1>
 
-            <p>
+            <p id="choirflo-download">
               ChoirFlo helps choir directors, musical band members, worship
               teams, and music leaders save songs, manage keys, and build
               worship line-ups without stress.
@@ -81,11 +81,10 @@ function App() {
               <a
                 href="/ChoirFlo.apk"
                 className="btn-primary large"
-                id="choirflo-download"
                 download
                 onClick={handleDownloadClick}
               >
-                Download Android App
+                Download/Update Android App
               </a>
               <span className="hero-note">Android • Free to use</span>
             </div>
