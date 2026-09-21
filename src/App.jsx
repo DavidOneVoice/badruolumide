@@ -177,7 +177,7 @@ function App() {
             <h2 style={{ color: "#1c6e3f" }}>Start Using ChoirFlo Today</h2>
             <p>
               Download the Android app and experience a better way to manage
-              your team's music.
+              your team&apos;s music.
             </p>
 
             <a
