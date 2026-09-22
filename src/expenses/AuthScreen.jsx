@@ -14,10 +14,21 @@ export default function AuthScreen({ onSignIn, onSignUp, onResetPassword }) {
   const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const [signupComplete, setSignupComplete] = useState(null);
 
   const switchMode = (nextMode) => {
     setMode(nextMode);
     setFeedback(null);
+    setSignupComplete(null);
+  };
+
+  const continueToSignIn = () => {
+    setMode("signin");
+    setSignupComplete(null);
+    setFeedback({
+      type: "success",
+      text: "Your account is ready. Sign in with the details you just created.",
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -34,12 +45,14 @@ export default function AuthScreen({ onSignIn, onSignUp, onResetPassword }) {
         });
       } else if (mode === "signup") {
         const result = await onSignUp({ fullName, email, password });
-        if (result?.needsConfirmation) {
-          setFeedback({
-            type: "success",
-            text: "Your account is almost ready. Check your inbox to confirm your email.",
-          });
-        }
+        setSignupComplete({
+          email,
+          needsConfirmation: Boolean(result?.needsConfirmation),
+        });
+        setFullName("");
+        setEmail("");
+        setPassword("");
+        setShowPassword(false);
       } else {
         await onSignIn({ email, password });
       }
@@ -130,6 +143,29 @@ export default function AuthScreen({ onSignIn, onSignUp, onResetPassword }) {
           </span>
         </div>
 
+        {signupComplete ? (
+          <div className="auth-form" role="status" aria-live="polite">
+            <div className="auth-heading">
+              <h2>Account created successfully</h2>
+              <p>
+                {signupComplete.needsConfirmation
+                  ? `We sent a confirmation link to ${signupComplete.email}. You can sign in after confirming your email.`
+                  : "Your account is ready. You can start recording your expenses now."}
+              </p>
+            </div>
+            <div className="form-feedback form-feedback--success">
+              <CheckCircleRoundedIcon />
+              <span>You’re all set. Your signup details have been cleared.</span>
+            </div>
+            <button className="primary-button auth-submit" type="button" onClick={continueToSignIn}>
+              Continue to sign in
+              <ArrowForwardRoundedIcon />
+            </button>
+            {signupComplete.needsConfirmation && (
+              <small>You can close this page after confirming your email.</small>
+            )}
+          </div>
+        ) : (
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-heading">
             <h2>{title}</h2>
@@ -230,6 +266,7 @@ export default function AuthScreen({ onSignIn, onSignUp, onResetPassword }) {
             )}
           </div>
         </form>
+        )}
       </section>
     </main>
   );
